@@ -30,9 +30,9 @@ class MosqueListPage extends StatelessWidget {
           final currentLocation = snapshot.data!;
           return BlocProvider(
             create: (context) => getIt<MosqueBloc>()
-              ..add(FetchMosques(currentLocation.latitude, currentLocation.longitude)),
+              // ..add(FetchMosques(currentLocation.latitude, currentLocation.longitude)),
             // for testing
-            // ..add(FetchMosques(12.3682265169693, 76.6509528432083)),
+            ..add(FetchMosques(12.3682265169693, 76.6509528432083)),
             child: BlocBuilder<MosqueBloc, MosqueState>(
               builder: (context, state) {
                 if (state is MosqueLoading) {

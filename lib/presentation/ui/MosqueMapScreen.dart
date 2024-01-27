@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -73,7 +74,7 @@ class _MosqueMapScreenState extends State<MosqueMapScreen> {
             onPressed: () {
               var url =
                   'https://www.google.com/maps/search/?api=1&query=${mosque.masjidLocation!.coordinates![1]},${mosque.masjidLocation!.coordinates![0]}';
-              _launchURL(url);
+              _launchGoogleMaps(mosque.masjidLocation!.coordinates![1], mosque.masjidLocation!.coordinates![0]);
             },
           ),
         ],
@@ -96,11 +97,16 @@ class _MosqueMapScreenState extends State<MosqueMapScreen> {
     );
   }
 
-  void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> _launchGoogleMaps(double latitude, double longitude) async {
+    final availableMaps = await MapLauncher.installedMaps;
+
+    if (availableMaps.isNotEmpty) {
+      await MapLauncher.showDirections(
+        mapType: MapType.google,
+        destination: Coords(latitude, longitude),
+      );
     } else {
-      throw 'Could not launch $url';
+      throw 'No maps app installed';
     }
   }
 }
